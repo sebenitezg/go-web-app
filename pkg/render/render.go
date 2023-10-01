@@ -3,32 +3,40 @@ package render
 import (
 	"bytes"
 	"fmt"
+	"go-web-app/pkg/config"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
 )
 
-func RenderTemplate(w http.ResponseWriter, tmpl string) {
-	/*
-		This method render HTML templates
-	*/
+var functions = template.FuncMap{}
+var app *config.AppConfig
 
-	// Create the template cache
-	tc, err := createTemplateCache()
-	if err != nil {
-		log.Fatal(err)
+func NewTemplates(a *config.AppConfig) {
+	/* Set the config for the template package */
+	app = a
+}
+
+func RenderTemplate(w http.ResponseWriter, tmpl string) {
+	/* Render HTML templates */
+
+	var tc map[string]*template.Template
+	if app.UseCache {
+		tc = app.TemplateCache
+	} else {
+		tc, _ = CreateTemplateCache()
 	}
 
 	// Get requested template from cache
 	t, ok := tc[tmpl]
 	if !ok {
-		log.Fatal(err)
+		log.Fatal("Could not get template from template cache")
 	}
 
 	buff := new(bytes.Buffer)
 
-	err = t.Execute(buff, nil)
+	err := t.Execute(buff, nil)
 	if err != nil {
 		log.Println(err)
 	}
@@ -36,11 +44,11 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 	// Render the template
 	_, err = buff.WriteTo(w)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error writing template to browser", err)
 	}
 }
 
-func createTemplateCache() (map[string]*template.Template, error) {
+func CreateTemplateCache() (map[string]*template.Template, error) {
 	//myCache := make(map[string]*template.Template)
 	myCache := map[string]*template.Template{}
 
