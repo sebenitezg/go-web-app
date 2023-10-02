@@ -3,12 +3,13 @@ package render
 import (
 	"bytes"
 	"fmt"
-	"go-web-app/pkg/config"
-	"go-web-app/pkg/models"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/sebenitezg/go-web-app/pkg/config"
+	"github.com/sebenitezg/go-web-app/pkg/models"
 )
 
 var functions = template.FuncMap{}
@@ -23,7 +24,6 @@ func AddDefaultData(td *models.TemplateData) *models.TemplateData {
 	/* Add default data to the template data */
 	return td
 }
-
 
 func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
 	/* Render HTML templates */

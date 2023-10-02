@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"go-web-app/pkg/config"
-	"go-web-app/pkg/handlers"
-	"go-web-app/pkg/render"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/sebenitezg/go-web-app/pkg/config"
+	"github.com/sebenitezg/go-web-app/pkg/handlers"
+	"github.com/sebenitezg/go-web-app/pkg/render"
 
 	"github.com/alexedwards/scs/v2"
 )
